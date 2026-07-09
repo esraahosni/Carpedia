@@ -1,0 +1,67 @@
+{% extends 'cars/base.html' %}
+{% load static %}
+{% block content %}
+<h2>
+    {% if condition == 'new' %}New Cars
+    {% elif condition == 'used' %}Used Cars
+    {% else %}All Cars
+    {% endif %}
+</h2>
+
+<form method="get" class="filter-form">
+    <input type="text" name="brand" placeholder="Brand">
+    <input type="number" name="year" placeholder="Year">
+    <input type="text" name="fuel_type" placeholder="Fuel Type">
+    <input type="number" name="max_price" placeholder="Max Price">
+
+    <button type="submit">Filter</button>
+</form>
+
+<section class="search-section">
+    <h2 class="search-heading">Looking for something specific?</h2>
+    <form method="get" action="{% url 'car_list' %}" class="search-bar">
+        <input type="text" name="brand" placeholder="Search by brand, model...">
+        <button type="submit" class="btn btn-primary">🔍 Search</button>
+    </form>
+</section>
+
+
+<div class="car-grid">
+    {% for car in page_obj %}
+    <div class="car-card">
+        <div class="card-img-wrap">
+            {% if car.main_image %}
+            <img src="{{ car.main_image.url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
+            {% else %}
+            <img src="{% static 'images/default_car.jpeg' %}" alt="No image available">
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a href="{% url 'toggle_favourite' car.pk %}" class="fav-heart" onclick="event.stopPropagation();">
+                {% if car.id in favourited_ids %}❤{% else %}♡{% endif %}
+                </a>
+            {% endif %}
+        </div>
+        <h3>{{ car.brand }} {{ car.model_name }} ({{ car.year }})</h3>
+        <div class="tag-row">
+            <span class="condition-tag {{ car.condition }}">{{ car.get_condition_display }}</span>
+        </div>
+        <p class="price">${{ car.price }}</p>
+        <a href="{% url 'car_detail' car.pk %}" class="details-link">View Details</a>
+    </div>
+    {% empty %}
+    <p>No cars added yet.</p>
+    {% endfor %}
+</div>
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">← Prev</a>
+    {% endif %}
+
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next →</a>
+    {% endif %}
+</div>
+{% endblock %}

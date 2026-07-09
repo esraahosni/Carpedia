@@ -1,0 +1,40 @@
+{% extends 'cars/base.html' %}
+{% block content %}
+<h2>👥 User Management</h2>
+<p style="color:#9fa6b2; margin-bottom: 24px;">Overview and control of all community members.</p>
+
+{% if messages %}
+    {% for message in messages %}<div class="auth-message">{{ message }}</div>{% endfor %}
+{% endif %}
+
+<div class="admin-table-wrap">
+    <table class="admin-table">
+        <thead>
+            <tr><th>User</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email|default:"—" }}</td>
+                <td>
+                    {% if u.is_staff %}<span class="role-badge">⚙ Admin</span>{% else %}<span class="condition-tag used">User</span>{% endif %}
+                </td>
+                <td class="admin-actions">
+                    {% if u == request.user %}
+                        <span style="color:#7c8492;">(You)</span>
+                    {% else %}
+                        {% if u.is_staff %}
+                            <a href="{% url 'demote_user' u.id %}" class="btn-small">↓ Demote</a>
+                        {% else %}
+                            <a href="{% url 'promote_user' u.id %}" class="btn-small">↑ Promote</a>
+                        {% endif %}
+                        <a href="{% url 'delete_user' u.id %}" class="btn-small btn-danger" onclick="return confirm('Delete this user?');">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

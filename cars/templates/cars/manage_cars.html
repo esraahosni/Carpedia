@@ -1,0 +1,38 @@
+{% extends 'cars/base.html' %}
+{% block content %}
+<div class="category-header">
+    <h2>⚙ Manage Cars</h2>
+    <a href="{% url 'add_car' %}" class="btn btn-primary">+ Add New Car</a>
+</div>
+
+{% if messages %}
+    {% for message in messages %}<div class="auth-message">{{ message }}</div>{% endfor %}
+{% endif %}
+
+<div class="admin-table-wrap">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>#</th><th>Car</th><th>Condition</th><th>Price</th><th>Added</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for car in cars %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ car.brand.name }} {{ car.model_name }} ({{ car.year }})</td>
+                <td><span class="condition-tag {{ car.condition }}">{{ car.get_condition_display }}</span></td>
+                <td>${{ car.price }}</td>
+                <td>{{ car.created_at|date:"M d, Y" }}</td>
+                <td class="admin-actions">
+                    <a href="{% url 'edit_car' car.pk %}" class="btn-small">Edit</a>
+                    <a href="{% url 'delete_car' car.pk %}" class="btn-small btn-danger" onclick="return confirm('Delete this car?');">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6">No cars yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

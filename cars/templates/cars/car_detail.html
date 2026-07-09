@@ -1,0 +1,40 @@
+{% extends 'cars/base.html' %}
+{% load static %}
+{% block content %}
+<div class="car-detail-container">
+    {% if car.main_image %}
+    <img src="{{ car.main_image.url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
+    {% else %}
+    <img src="{% static 'images/default_car.jpeg' %}" alt="No image available">
+    {% endif %}
+
+    {% if car.images.all %}
+    <div class="gallery">
+        {% for img in car.images.all %}
+        <img src="{{ img.image.url }}" alt="{{ car.model_name }} photo">
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <h2>{{ car.brand }} {{ car.model_name }} ({{ car.year }})</h2>
+    <div class="tag-row">
+        <span class="condition-tag {{ car.condition }}">{{ car.get_condition_display }}</span>
+    </div>
+    {% if user.is_authenticated %}
+    <a href="{% url 'toggle_favourite' car.pk %}" class="btn {% if is_favourited %}btn-primary{% else %}btn-secondary{% endif %}">
+        {% if is_favourited %}❤ Favourited{% else %}♡ Add to Favourites{% endif %}
+    </a>
+    {% endif %}
+
+    <div class="spec-grid">
+        <div class="spec-item"><span class="spec-label">Price</span><span class="spec-value">${{ car.price }}</span></div>
+        <div class="spec-item"><span class="spec-label">Engine</span><span class="spec-value">{{ car.engine }}</span></div>
+        <div class="spec-item"><span class="spec-label">Horsepower</span><span class="spec-value">{{ car.horsepower }} HP</span></div>
+        <div class="spec-item"><span class="spec-label">Fuel Type</span><span class="spec-value">{{ car.fuel_type }}</span></div>
+        <div class="spec-item"><span class="spec-label">Transmission</span><span class="spec-value">{{ car.transmission }}</span></div>
+    </div>
+
+    <p class="description">{{ car.description }}</p>
+    <a href="{% url 'car_list' %}" class="back-link">← Back to all cars</a>
+</div>
+{% endblock %}

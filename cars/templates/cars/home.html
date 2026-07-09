@@ -1,0 +1,127 @@
+{% extends 'cars/base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Carousel -->
+<section class="hero-carousel">
+    <div class="carousel-track">
+        <div class="carousel-slide active" style="background-image: url('{% static "images/car.webp" %}');">
+            <div class="slide-overlay">
+                <span class="slide-badge">🕐 NEW ARRIVALS</span>
+                <h1>Find Your <span>Perfect Ride</span></h1>
+                <p>Browse new and used cars from trusted sellers.</p>
+                <p>Compare specs, prices, and reviews — all in one place.</p>
+            </div>
+        </div>
+        <div class="carousel-slide" style="background-image: url('{% static "images/car2.jfif" %}');">
+            <div class="slide-overlay">
+                <span class="slide-badge">✓ VERIFIED LISTINGS</span>
+                <h1>Quality You <span>Can Trust</span></h1>
+                <p>Every car is inspected and verified before listing.</p>
+                <p>Buy with confidence, every single time.</p>
+            </div>
+        </div>
+        <div class="carousel-slide" style="background-image: url('{% static "images/car3.webp" %}');">
+            <div class="slide-overlay">
+                <span class="slide-badge">🔥 BEST DEALS</span>
+                <h1>Deals That <span>Drive You Wild</span></h1>
+                <p>Great prices on the cars you actually want.</p>
+                <p>Limited-time offers updated weekly.</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="carousel-arrow" onclick="changeSlide(1)">&#8250;</button>
+
+    <div class="carousel-dots">
+        <span class="dot active" onclick="goToSlide(0)"></span>
+        <span class="dot" onclick="goToSlide(1)"></span>
+        <span class="dot" onclick="goToSlide(2)"></span>
+    </div>
+</section>
+
+<!-- Hero -->
+<section class="hero-v2">
+    <span class="eyebrow">Find Your Perfect Match</span>
+    <h1>Discover Your Dream Car, <span>New or Used</span></h1>
+    <p>Browse thousands of verified listings, compare specs, and drive home the car that fits your life and budget.</p>
+    <div class="hero-buttons">
+        <a href="{% url 'new_cars' %}" class="btn btn-primary">Browse New Cars</a>
+        <a href="{% url 'used_cars' %}" class="btn btn-secondary">Browse Used Cars</a>
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="stats-bar">
+    <div class="stat-item">
+        <span class="stat-number">500+</span>
+        <span class="stat-label">Cars Listed</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">50+</span>
+        <span class="stat-label">Brands</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">10K+</span>
+        <span class="stat-label">Happy Customers</span>
+    </div>
+    <div class="stat-item">
+        <span class="stat-number">24/7</span>
+        <span class="stat-label">Support</span>
+    </div>
+</section>
+
+{% if not user.is_authenticated %}
+<section class="why-join-section">
+    <h2 class="why-join-heading">Why Join Our Community?</h2>
+
+    <div class="why-join-grid">
+        <div class="why-join-card">
+            <span class="why-join-number">01</span>
+            <h3>Discover:</h3>
+            <p>Browse through new arrivals, used deals, and every car type in between.</p>
+        </div>
+        <div class="why-join-card">
+            <span class="why-join-number">02</span>
+            <h3>Search:</h3>
+            <p>Find exactly what you're looking for by brand, model, or price.</p>
+        </div>
+        <div class="why-join-card">
+            <span class="why-join-number">03</span>
+            <h3>Save:</h3>
+            <p>Create an account to save cars to your personal favourites list!</p>
+        </div>
+    </div>
+
+    <div class="why-join-cta">
+        <a href="{% url 'register' %}" class="btn btn-primary">Create an Account →</a>
+    </div>
+</section>
+{% endif %}
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+
+    function showSlide(index) {
+        slides.forEach(s => s.classList.remove('active'));
+        dots.forEach(d => d.classList.remove('active'));
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentSlide = index;
+    }
+
+    function changeSlide(direction) {
+        let newIndex = (currentSlide + direction + slides.length) % slides.length;
+        showSlide(newIndex);
+    }
+
+    function goToSlide(index) {
+        showSlide(index);
+    }
+
+    setInterval(() => changeSlide(1), 5000);
+</script>
+
+{% endblock %}

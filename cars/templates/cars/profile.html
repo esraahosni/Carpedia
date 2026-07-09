@@ -1,0 +1,49 @@
+{% extends 'cars/base.html' %}
+{% block content %}
+{% load static %}
+<div class="profile-header">
+    <div class="profile-avatar">{{ user.username|first|upper }}</div>
+    <div>
+        <h1>{{ user.username }}</h1>
+        <p class="profile-meta">Member since {{ user.date_joined|date:"F Y" }}</p>
+        {% if user.is_staff %}
+        <span class="role-badge">⚙ Admin</span>
+        {% endif %}
+    </div>
+</div>
+
+<div class="profile-stat">
+    <span class="stat-number">{{ favourites.count }}</span>
+    <span class="stat-label">Favourites Saved</span>
+</div>
+
+<div class="profile-section">
+    <div class="category-header">
+        <h2>❤ My Favourite Cars</h2>
+        <a href="{% url 'car_list' %}" class="see-all">Browse More →</a>
+    </div>
+    <div class="car-grid">
+        {% for fav in favourites %}
+        <div class="car-card">
+            <div class="card-img-wrap">
+                {% if fav.car.main_image %}
+                    <img src="{% static 'images/BMW.jpeg' %}" alt="{{ fav.car }}">
+                {% else %}
+                    <div class="no-image">No Image</div>
+                {% endif %}
+            </div>
+            <h3>{{ fav.car }} ({{ fav.car.year }})</h3>
+            <p class="price">${{ fav.car.price }}</p>
+            <a href="{% url 'car_detail' fav.car.pk %}" class="details-link">View Details</a>
+        </div>
+        {% empty %}
+        <p class="empty-text">You haven't saved any favourites yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<form method="post" action="{% url 'logout' %}" style="margin-top: 30px;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-secondary">Logout</button>
+</form>
+{% endblock %}
