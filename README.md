@@ -1,4 +1,4 @@
-# 🚗 CarSite
+# 🚗 Carpedia
 
 A full-stack car marketplace web application built with Django, allowing users to browse, search, and filter new and used car listings.
 
