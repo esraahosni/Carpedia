@@ -2,6 +2,7 @@
 {% block content %}
 <div class="auth-container">
     <div class="auth-card" style="max-width: 600px;">
+        {% for message in messages %}<div class="auth-message">{{ message }}</div>{% endfor %}
         <h2>{% if editing %}Edit Car{% else %}Add New Car{% endif %}</h2>
         <p class="auth-subtitle">{% if editing %}Update the details for this listing.{% else %}Add a new car to the platform.{% endif %}</p>
 

@@ -1,3 +1,4 @@
+import logging
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -9,7 +10,7 @@ from .forms import StyledUserCreationForm, CarForm
 from .models import Car, Favourite
 
 
-# Create your views here.
+logger = logging.getLogger(__name__)
 
 def home(request):
     new_cars = Car.objects.filter(condition='new').order_by('-created_at')[:4]
@@ -81,7 +82,12 @@ def add_car(request):
     if request.method == 'POST':
         form = CarForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            try:
+                form.save()
+            except Exception as exc:  # e.g. image storage misconfigured; show staff a readable error
+                logger.exception('Saving car failed')
+                messages.error(request, f'Could not save the car (image storage error?): {type(exc).__name__}: {exc}')
+                return render(request, 'cars/add_car.html', {'form': form})
             messages.success(request, 'Car added successfully!')
             return redirect('manage_cars')
     else:
@@ -94,7 +100,12 @@ def edit_car(request, pk):
     if request.method == 'POST':
         form = CarForm(request.POST, request.FILES, instance=car)
         if form.is_valid():
-            form.save()
+            try:
+                form.save()
+            except Exception as exc:
+                logger.exception('Updating car failed')
+                messages.error(request, f'Could not save the car (image storage error?): {type(exc).__name__}: {exc}')
+                return render(request, 'cars/add_car.html', {'form': form, 'editing': True})
             messages.success(request, 'Car updated successfully!')
             return redirect('manage_cars')
     else:

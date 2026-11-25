@@ -107,3 +107,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'      # أو 'profile' لو عايزه يروح للبروفايل بعد الدخول
 LOGOUT_REDIRECT_URL = 'home'
+
+# Send errors (with tracebacks) to stderr so they show up in Vercel's runtime logs.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {'console': {'class': 'logging.StreamHandler'}},
+    'root': {'handlers': ['console'], 'level': 'WARNING'},
+}
