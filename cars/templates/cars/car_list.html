@@ -31,7 +31,7 @@
     <div class="car-card">
         <div class="card-img-wrap">
             {% if car.main_image %}
-            <img src="{{ car.main_image.url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
+            <img src="{{ car.image_url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
             {% else %}
             <img src="{% static 'images/car.webp' %}" alt="No image available">
             {% endif %}

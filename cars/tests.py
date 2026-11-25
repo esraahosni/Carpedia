@@ -74,3 +74,12 @@ class ActionSafetyTests(TestCase):
         self.client.force_login(self.admin)
         self.assertContains(self.client.get(reverse('manage_cars')), 'method="post"')
         self.assertContains(self.client.get(reverse('user_management')), 'csrfmiddlewaretoken')
+
+
+class SeedTests(TestCase):
+    def test_seed_is_idempotent_and_renders(self):
+        from django.core.management import call_command
+        call_command('seed_cars'); call_command('seed_cars')
+        self.assertEqual(Car.objects.count(), 10)
+        r = self.client.get(reverse('car_list'))
+        self.assertContains(r, 'images/seed/')

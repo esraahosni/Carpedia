@@ -38,6 +38,18 @@ class Car(models.Model):
     def __str__(self):
         return f"{self.brand} {self.model_name}"
 
+    @property
+    def image_url(self):
+        """Seed photos live in static/images/seed (they persist on Vercel);
+        uploaded photos use the normal media storage."""
+        name = self.main_image.name if self.main_image else ''
+        if not name:
+            return ''
+        if name.startswith('seed/'):
+            from django.templatetags.static import static
+            return static('images/' + name)
+        return self.main_image.url
+
 
 class CarImage(models.Model):
     car = models.ForeignKey(

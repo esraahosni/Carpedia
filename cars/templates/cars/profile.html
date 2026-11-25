@@ -27,7 +27,7 @@
         <div class="car-card">
             <div class="card-img-wrap">
                 {% if fav.car.main_image %}
-                    <img src="{{ fav.car.main_image.url }}" alt="{{ fav.car }}">
+                    <img src="{{ fav.car.image_url }}" alt="{{ fav.car }}">
                 {% else %}
                     <div class="no-image">No Image</div>
                 {% endif %}
