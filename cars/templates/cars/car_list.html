@@ -1,55 +1,30 @@
 {% extends 'cars/base.html' %}
 {% load static %}
 {% block content %}
-<h2>
+<div class="page-head"><h2>
     {% if condition == 'new' %}New Cars
     {% elif condition == 'used' %}Used Cars
     {% else %}All Cars
     {% endif %}
-</h2>
+</h2><p class="page-sub">{{ page_obj.paginator.count }} car{{ page_obj.paginator.count|pluralize }} available</p></div>
 
 <form method="get" class="filter-form">
-    <input type="text" name="brand" placeholder="Brand">
-    <input type="number" name="year" placeholder="Year">
-    <input type="text" name="fuel_type" placeholder="Fuel Type">
-    <input type="number" name="max_price" placeholder="Max Price">
+    <input type="text" name="brand" placeholder="Brand" value="{{ request.GET.brand }}">
+    <input type="number" name="year" placeholder="Year" value="{{ request.GET.year }}">
+    <input type="text" name="fuel_type" placeholder="Fuel type" value="{{ request.GET.fuel_type }}">
+    <input type="number" name="max_price" placeholder="Max price ($)" value="{{ request.GET.max_price }}">
 
     <button type="submit">Filter</button>
 </form>
 
-<section class="search-section">
-    <h2 class="search-heading">Looking for something specific?</h2>
-    <form method="get" action="{% url 'car_list' %}" class="search-bar">
-        <input type="text" name="brand" placeholder="Search by brand, model...">
-        <button type="submit" class="btn btn-primary">🔍 Search</button>
-    </form>
-</section>
+
 
 
 <div class="car-grid">
     {% for car in page_obj %}
-    <div class="car-card">
-        <div class="card-img-wrap">
-            {% if car.main_image %}
-            <img src="{{ car.image_url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
-            {% else %}
-            <img src="{% static 'images/car.webp' %}" alt="No image available">
-            {% endif %}
-            {% if user.is_authenticated %}
-                <form method="post" action="{% url 'toggle_favourite' car.pk %}" class="inline-form">{% csrf_token %}<button type="submit" class="fav-heart" onclick="event.stopPropagation();">
-                {% if car.id in favourited_ids %}❤{% else %}♡{% endif %}
-                </button></form>
-            {% endif %}
-        </div>
-        <h3>{{ car.brand }} {{ car.model_name }} ({{ car.year }})</h3>
-        <div class="tag-row">
-            <span class="condition-tag {{ car.condition }}">{{ car.get_condition_display }}</span>
-        </div>
-        <p class="price">${{ car.price }}</p>
-        <a href="{% url 'car_detail' car.pk %}" class="details-link">View Details</a>
-    </div>
+    {% include 'cars/_card.html' %}
     {% empty %}
-    <p>No cars added yet.</p>
+    <p class="empty-state">No cars match your search. Try different filters.</p>
     {% endfor %}
 </div>
 

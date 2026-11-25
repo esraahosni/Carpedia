@@ -2,8 +2,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Carpedia</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Carpedia | New &amp; Used Cars{% endblock %}</title>
+    <meta name="description" content="Carpedia: browse new and used cars, compare specs and prices, and save your favourites.">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/polish.css' %}">
 </head>
 
 <body>
@@ -45,7 +49,7 @@
         <div class="footer-container">
             <div class="footer-top">
                 <div class="footer-brand">
-                    <h3>CarSite</h3>
+                    <h3>Carpedi<span class="logo-accent">a</span></h3>
                     <p>Your trusted destination for new and used cars, built for easy browsing and confident buying.</p>
                 </div>
                 <div class="footer-col">
@@ -71,7 +75,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; 2026 CarSite. All rights reserved.
+                &copy; 2026 Carpedia. All rights reserved.
             </div>
         </div>
     </footer>

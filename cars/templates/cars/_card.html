@@ -1,0 +1,22 @@
+{% load static %}
+<div class="car-card">
+    <div class="card-img-wrap">
+        <a href="{% url 'car_detail' car.pk %}" class="card-img-link" tabindex="-1" aria-hidden="true">
+            {% if car.main_image %}
+            <img src="{{ car.image_url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}" loading="lazy">
+            {% else %}
+            <img src="{% static 'images/car.webp' %}" alt="No image available" loading="lazy">
+            {% endif %}
+        </a>
+        <span class="condition-tag {{ car.condition }} card-badge">{{ car.get_condition_display }}</span>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'toggle_favourite' car.pk %}" class="inline-form">{% csrf_token %}<button type="submit" class="fav-heart" aria-label="Toggle favourite">{% if car.id in favourited_ids %}❤{% else %}♡{% endif %}</button></form>
+        {% endif %}
+    </div>
+    <h3><a href="{% url 'car_detail' car.pk %}">{{ car.brand }} {{ car.model_name }}</a></h3>
+    <p class="card-meta">{{ car.year }} · {{ car.fuel_type }} · {{ car.transmission }}</p>
+    <div class="card-foot">
+        <p class="price">${{ car.price|floatformat:"0g" }}</p>
+        <a href="{% url 'car_detail' car.pk %}" class="details-link">View Details</a>
+    </div>
+</div>

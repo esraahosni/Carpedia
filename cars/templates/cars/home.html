@@ -71,6 +71,20 @@
     </div>
 </section>
 
+<!-- Featured -->
+{% if new_cars %}
+<section class="featured">
+    <div class="section-head"><h2>New Arrivals</h2><a href="{% url 'new_cars' %}" class="see-all">View all new cars →</a></div>
+    <div class="car-grid">{% for car in new_cars %}{% include 'cars/_card.html' %}{% endfor %}</div>
+</section>
+{% endif %}
+{% if used_cars %}
+<section class="featured">
+    <div class="section-head"><h2>Popular Used Cars</h2><a href="{% url 'used_cars' %}" class="see-all">View all used cars →</a></div>
+    <div class="car-grid">{% for car in used_cars %}{% include 'cars/_card.html' %}{% endfor %}</div>
+</section>
+{% endif %}
+
 {% if not user.is_authenticated %}
 <section class="why-join-section">
     <h2 class="why-join-heading">Why Join Our Community?</h2>

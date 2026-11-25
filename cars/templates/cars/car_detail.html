@@ -1,40 +1,38 @@
 {% extends 'cars/base.html' %}
 {% load static %}
+{% block title %}{{ car.brand }} {{ car.model_name }} {{ car.year }} | Carpedia{% endblock %}
 {% block content %}
 <div class="car-detail-container">
-    {% if car.main_image %}
-    <img src="{{ car.image_url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
-    {% else %}
-    <img src="{% static 'images/car.webp' %}" alt="No image available">
-    {% endif %}
-
-    {% if car.images.all %}
-    <div class="gallery">
-        {% for img in car.images.all %}
-        <img src="{{ img.image.url }}" alt="{{ car.model_name }} photo">
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <h2>{{ car.brand }} {{ car.model_name }} ({{ car.year }})</h2>
-    <div class="tag-row">
-        <span class="condition-tag {{ car.condition }}">{{ car.get_condition_display }}</span>
-    </div>
-    {% if user.is_authenticated %}
-    <form method="post" action="{% url 'toggle_favourite' car.pk %}" class="inline-form">{% csrf_token %}<button type="submit" class="btn {% if is_favourited %}btn-primary{% else %}btn-secondary{% endif %}">
-        {% if is_favourited %}❤ Favourited{% else %}♡ Add to Favourites{% endif %}
-    </button></form>
-    {% endif %}
-
-    <div class="spec-grid">
-        <div class="spec-item"><span class="spec-label">Price</span><span class="spec-value">${{ car.price }}</span></div>
-        <div class="spec-item"><span class="spec-label">Engine</span><span class="spec-value">{{ car.engine }}</span></div>
-        <div class="spec-item"><span class="spec-label">Horsepower</span><span class="spec-value">{{ car.horsepower }} HP</span></div>
-        <div class="spec-item"><span class="spec-label">Fuel Type</span><span class="spec-value">{{ car.fuel_type }}</span></div>
-        <div class="spec-item"><span class="spec-label">Transmission</span><span class="spec-value">{{ car.transmission }}</span></div>
-    </div>
-
-    <p class="description">{{ car.description }}</p>
     <a href="{% url 'car_list' %}" class="back-link">← Back to all cars</a>
+    <div class="detail-layout">
+        <div class="detail-media">
+            <img class="detail-main-img" src="{% if car.main_image %}{{ car.image_url }}{% else %}{% static 'images/car.webp' %}{% endif %}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
+            {% if car.images.all %}
+            <div class="gallery">
+                {% for img in car.images.all %}<img src="{{ img.image.url }}" alt="{{ car.model_name }} photo">{% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="detail-info">
+            <span class="condition-tag {{ car.condition }}">{{ car.get_condition_display }}</span>
+            <h2>{{ car.brand }} {{ car.model_name }} <span class="detail-year">{{ car.year }}</span></h2>
+            <p class="detail-price">${{ car.price|floatformat:"0g" }}</p>
+            {% if user.is_authenticated %}
+            <form method="post" action="{% url 'toggle_favourite' car.pk %}" class="inline-form">{% csrf_token %}<button type="submit" class="btn {% if is_favourited %}btn-primary{% else %}btn-secondary{% endif %}">
+                {% if is_favourited %}❤ Favourited{% else %}♡ Add to Favourites{% endif %}
+            </button></form>
+            {% endif %}
+            <div class="spec-grid">
+                <div class="spec-item"><span class="spec-label">Engine</span><span class="spec-value">{{ car.engine }}</span></div>
+                <div class="spec-item"><span class="spec-label">Horsepower</span><span class="spec-value">{{ car.horsepower }} HP</span></div>
+                <div class="spec-item"><span class="spec-label">Fuel Type</span><span class="spec-value">{{ car.fuel_type }}</span></div>
+                <div class="spec-item"><span class="spec-label">Transmission</span><span class="spec-value">{{ car.transmission }}</span></div>
+                <div class="spec-item"><span class="spec-label">Year</span><span class="spec-value">{{ car.year }}</span></div>
+                <div class="spec-item"><span class="spec-label">Condition</span><span class="spec-value">{{ car.get_condition_display }}</span></div>
+            </div>
+            <h3 class="detail-sub">About this car</h3>
+            <p class="description">{{ car.description }}</p>
+        </div>
+    </div>
 </div>
 {% endblock %}
