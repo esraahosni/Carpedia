@@ -6,9 +6,14 @@ A full-stack car marketplace built with Django. Visitors browse new and used car
 
 ![Home page](docs/screenshots/home.jpg)
 
-| Browse cars | Car details | Mobile |
-|---|---|---|
-| ![Cars list](docs/screenshots/cars.jpg) | ![Car detail](docs/screenshots/detail.jpg) | ![Mobile](docs/screenshots/mobile.jpg) |
+### Browse cars
+![Cars list](docs/screenshots/cars.jpg)
+
+### Car details
+![Car detail](docs/screenshots/detail.jpg)
+
+### Mobile
+<img src="docs/screenshots/mobile.jpg" alt="Mobile view" width="320">
 
 ## Features
 
