@@ -31,7 +31,7 @@
 
             <div class="auth-nav">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="btn-auth btn-login">👤 {{ user.username }}</a>
+                    <a href="{% url 'profile' %}" class="btn-auth btn-login"><svg class="user-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg> {{ user.username }}</a>
                     <form method="post" action="{% url 'logout' %}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn-auth btn-register" style="border:none; cursor:pointer;">Logout</button>

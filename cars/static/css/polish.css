@@ -349,3 +349,5 @@ footer::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; 
     .carousel-slide.active, .brand-track, .carousel-slide.active .slide-overlay > * { animation: none !important; }
     .js .reveal { opacity: 1; translate: none; }
 }
+
+.user-ico { vertical-align: -3px; margin-right: 2px; }
