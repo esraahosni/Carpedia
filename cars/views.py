@@ -1,5 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
@@ -18,14 +20,8 @@ def home(request):
         'used_cars': used_cars,
     })
 
-@login_required
-def profile(request):
-    favourites = Favourite.objects.filter(user=request.user).select_related('car')
-    return render(request, 'cars/profile.html', {'favourites': favourites})
-
-
 def car_list(request, condition=None):
-    cars = Car.objects.all()
+    cars = Car.objects.all().order_by('-created_at')
     if condition:
         cars = cars.filter(condition=condition)
 
@@ -105,6 +101,7 @@ def edit_car(request, pk):
         form = CarForm(instance=car)
     return render(request, 'cars/add_car.html', {'form': form, 'editing': True})
 
+@require_POST
 @user_passes_test(lambda u: u.is_staff)
 def delete_car(request, pk):
     car = get_object_or_404(Car, pk=pk)
@@ -122,6 +119,7 @@ def user_management(request):
     users = User.objects.all().order_by('-date_joined')
     return render(request, 'cars/user_management.html', {'users': users})
 
+@require_POST
 @user_passes_test(lambda u: u.is_staff)
 def promote_user(request, user_id):
     u = get_object_or_404(User, pk=user_id)
@@ -130,6 +128,7 @@ def promote_user(request, user_id):
     messages.success(request, f'{u.username} promoted to Admin.')
     return redirect('user_management')
 
+@require_POST
 @user_passes_test(lambda u: u.is_staff)
 def demote_user(request, user_id):
     u = get_object_or_404(User, pk=user_id)
@@ -139,6 +138,7 @@ def demote_user(request, user_id):
         messages.success(request, f'{u.username} demoted to User.')
     return redirect('user_management')
 
+@require_POST
 @user_passes_test(lambda u: u.is_staff)
 def delete_user(request, user_id):
     u = get_object_or_404(User, pk=user_id)
@@ -155,6 +155,7 @@ def profile(request):
         'favourites': favourites,
     })
 
+@require_POST
 @login_required
 def toggle_favourite(request, pk):
     car = get_object_or_404(Car, pk=pk)
@@ -164,4 +165,7 @@ def toggle_favourite(request, pk):
         messages.success(request, 'Removed from favourites.')
     else:
         messages.success(request, 'Added to favourites!')
-    return redirect(request.META.get('HTTP_REFERER', 'car_list'))
+    nxt = request.META.get('HTTP_REFERER', '')
+    if nxt and url_has_allowed_host_and_scheme(nxt, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+        return redirect(nxt)
+    return redirect('car_list')

@@ -33,12 +33,12 @@
             {% if car.main_image %}
             <img src="{{ car.main_image.url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
             {% else %}
-            <img src="{% static 'images/default_car.jpeg' %}" alt="No image available">
+            <img src="{% static 'images/car.webp' %}" alt="No image available">
             {% endif %}
             {% if user.is_authenticated %}
-                <a href="{% url 'toggle_favourite' car.pk %}" class="fav-heart" onclick="event.stopPropagation();">
+                <form method="post" action="{% url 'toggle_favourite' car.pk %}" class="inline-form">{% csrf_token %}<button type="submit" class="fav-heart" onclick="event.stopPropagation();">
                 {% if car.id in favourited_ids %}❤{% else %}♡{% endif %}
-                </a>
+                </button></form>
             {% endif %}
         </div>
         <h3>{{ car.brand }} {{ car.model_name }} ({{ car.year }})</h3>

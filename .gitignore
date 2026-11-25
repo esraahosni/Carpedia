@@ -6,4 +6,6 @@ db.sqlite3
 staticfiles/
 media/
 .env
-.vscode/
+.vscode/*.pyc
+
+staticfiles_build/

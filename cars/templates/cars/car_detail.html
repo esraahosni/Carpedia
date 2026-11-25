@@ -5,7 +5,7 @@
     {% if car.main_image %}
     <img src="{{ car.main_image.url }}" alt="{{ car.brand }} {{ car.model_name }} {{ car.year }}">
     {% else %}
-    <img src="{% static 'images/default_car.jpeg' %}" alt="No image available">
+    <img src="{% static 'images/car.webp' %}" alt="No image available">
     {% endif %}
 
     {% if car.images.all %}
@@ -21,9 +21,9 @@
         <span class="condition-tag {{ car.condition }}">{{ car.get_condition_display }}</span>
     </div>
     {% if user.is_authenticated %}
-    <a href="{% url 'toggle_favourite' car.pk %}" class="btn {% if is_favourited %}btn-primary{% else %}btn-secondary{% endif %}">
+    <form method="post" action="{% url 'toggle_favourite' car.pk %}" class="inline-form">{% csrf_token %}<button type="submit" class="btn {% if is_favourited %}btn-primary{% else %}btn-secondary{% endif %}">
         {% if is_favourited %}❤ Favourited{% else %}♡ Add to Favourites{% endif %}
-    </a>
+    </button></form>
     {% endif %}
 
     <div class="spec-grid">

@@ -4,11 +4,27 @@ import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-only-key-change-in-production')
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+# Production is the default: DEBUG is off unless DEBUG=True is set explicitly.
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = 'dev-only-key-not-for-production'
+    else:
+        raise RuntimeError('SECRET_KEY environment variable is required when DEBUG is off.')
 
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost']
 CSRF_TRUSTED_ORIGINS = ['https://*.vercel.app']
+# Custom domain(s), comma separated, e.g. "carpedia.example.com"
+for _host in filter(None, (h.strip() for h in os.environ.get('EXTRA_HOSTS', '').split(','))):
+    ALLOWED_HOSTS.append(_host)
+    CSRF_TRUSTED_ORIGINS.append(f'https://{_host}')
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -70,7 +86,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles_build' / 'static'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 STORAGES = {
     'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},

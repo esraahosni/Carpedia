@@ -1879,3 +1879,8 @@ footer {
     text-align: center;
     padding: 40px 0;
 }
+
+/* forms used as action buttons (POST instead of GET links) */
+.inline-form { display: inline; margin: 0; }
+.inline-form button { font: inherit; cursor: pointer; }
+.fav-heart { border: 0; }

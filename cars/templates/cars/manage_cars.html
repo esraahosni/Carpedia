@@ -26,7 +26,7 @@
                 <td>{{ car.created_at|date:"M d, Y" }}</td>
                 <td class="admin-actions">
                     <a href="{% url 'edit_car' car.pk %}" class="btn-small">Edit</a>
-                    <a href="{% url 'delete_car' car.pk %}" class="btn-small btn-danger" onclick="return confirm('Delete this car?');">Delete</a>
+                    <form method="post" action="{% url 'delete_car' car.pk %}" class="inline-form" onsubmit="return confirm('Delete this car?');">{% csrf_token %}<button type="submit" class="btn-small btn-danger">Delete</button></form>
                 </td>
             </tr>
             {% empty %}

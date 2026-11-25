@@ -28,4 +28,23 @@ A full-stack car marketplace web application built with Django, where users can 
 - **Database:** SQLite (development), PostgreSQL (production via Railway)
 - **Frontend:** HTML, CSS, JavaScript (Django templates)
 - **Auth:** Django's built-in authentication system
-- **Deployment:** Railway
+- **Deployment:** Vercel (see below)
+
+
+---
+
+## Deploying on Vercel
+
+Required environment variables:
+
+| Variable | Notes |
+|---|---|
+| `SECRET_KEY` | Long random string (required, the app refuses to start without it) |
+| `DATABASE_URL` | External Postgres (Neon, Supabase or Vercel Postgres). SQLite does not work on Vercel. |
+| `EXTRA_HOSTS` | Optional, comma separated custom domains |
+| `DEBUG` | Leave unset (off). Use `DEBUG=True` only locally. |
+
+The build runs `build_files.sh` (collectstatic, plus migrate when `DATABASE_URL` is set).
+Note: uploaded car images need external storage on Vercel because its disk is read-only/ephemeral.
+
+Run tests locally: `DEBUG=True python manage.py test`
