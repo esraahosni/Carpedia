@@ -21,6 +21,8 @@
             <form method="post" action="{% url 'toggle_favourite' car.pk %}" class="inline-form">{% csrf_token %}<button type="submit" class="btn {% if is_favourited %}btn-primary{% else %}btn-secondary{% endif %}">
                 {% if is_favourited %}❤ Favourited{% else %}♡ Add to Favourites{% endif %}
             </button></form>
+            {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-secondary">♡ Log in to save</a>
             {% endif %}
             <div class="spec-grid">
                 <div class="spec-item"><span class="spec-label">Engine</span><span class="spec-value">{{ car.engine }}</span></div>

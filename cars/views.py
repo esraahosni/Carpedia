@@ -16,7 +16,15 @@ def home(request):
     new_cars = Car.objects.filter(condition='new').order_by('-created_at')[:4]
     used_cars = Car.objects.filter(condition='used').order_by('-created_at')[:4]
 
+    total_cars = Car.objects.count()
+    total_brands = Car.objects.values('brand').distinct().count()
+    new_count = Car.objects.filter(condition='new').count()
+    used_count = Car.objects.filter(condition='used').count()
     return render(request, 'cars/home.html', {
+        'total_cars': total_cars,
+        'total_brands': total_brands,
+        'new_count': new_count,
+        'used_count': used_count,
         'new_cars': new_cars,
         'used_cars': used_cars,
     })
@@ -54,7 +62,6 @@ def car_list(request, condition=None):
         'favourited_ids': favourited_ids,
     })
     
-@login_required    
 def car_detail(request, pk):
     car = get_object_or_404(Car, pk=pk)
     is_favourited = False

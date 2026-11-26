@@ -83,3 +83,15 @@ class SeedTests(TestCase):
         self.assertEqual(Car.objects.count(), 10)
         r = self.client.get(reverse('car_list'))
         self.assertContains(r, 'images/seed/')
+
+
+class PublicDetailAndStatsTests(TestCase):
+    def test_detail_is_public_and_home_stats_are_real(self):
+        from django.core.management import call_command
+        call_command('seed_cars')
+        car = Car.objects.first()
+        r = self.client.get(reverse('car_detail', args=[car.pk]))
+        self.assertEqual(r.status_code, 200)
+        r = self.client.get(reverse('home'))
+        self.assertEqual(r.context['total_cars'], 10)
+        self.assertNotContains(r, '10K+')

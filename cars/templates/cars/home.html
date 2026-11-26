@@ -71,20 +71,20 @@
 <!-- Stats -->
 <section class="stats-bar reveal">
     <div class="stat-item">
-        <span class="stat-number" data-count="500" data-suffix="+">500+</span>
+        <span class="stat-number" data-count="{{ total_cars }}">{{ total_cars }}</span>
         <span class="stat-label">Cars Listed</span>
     </div>
     <div class="stat-item">
-        <span class="stat-number" data-count="50" data-suffix="+">50+</span>
+        <span class="stat-number" data-count="{{ total_brands }}">{{ total_brands }}</span>
         <span class="stat-label">Brands</span>
     </div>
     <div class="stat-item">
-        <span class="stat-number" data-count="10" data-suffix="K+">10K+</span>
-        <span class="stat-label">Happy Customers</span>
+        <span class="stat-number" data-count="{{ new_count }}">{{ new_count }}</span>
+        <span class="stat-label">New Cars</span>
     </div>
     <div class="stat-item">
-        <span class="stat-number">24/7</span>
-        <span class="stat-label">Support</span>
+        <span class="stat-number" data-count="{{ used_count }}">{{ used_count }}</span>
+        <span class="stat-label">Used Cars</span>
     </div>
 </section>
 
